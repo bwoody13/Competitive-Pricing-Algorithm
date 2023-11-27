@@ -1,22 +1,50 @@
 from agents.ads_annihilators.abs_agents.base_agent import BaseAgent
+from agents.ads_annihilators.abs_agents.base_opt import OptAgent
 
 
-class AlphaAgent(BaseAgent):
-    def __init__(self, *args, initial_alpha=1.0, initial_item0_price=40, initial_item1_price=40, **kwargs):
+class AlphaAgent(OptAgent):
+    def __init__(self, *args,
+                 initial_alpha=1.0,
+                 upper_alpha_threshold=1.0,
+                 upper_alpha_reset=0.99,
+                 lower_alpha_threshold=0.0,
+                 lower_alpha_reset=0.1,
+                 **kwargs):
         super().__init__(*args, **kwargs)
-        self.alpha = initial_alpha
+        self.alphas = [initial_alpha for _ in self.n_items]
+        self.last_op_alphas = [initial_alpha for _ in self.n_items]
 
-        # Set item prices that are manipulated by alpha (for part 2)
-        self.item0_price = initial_item0_price
-        self.item1_price = initial_item1_price
+        # Bounding to keep alpha in a specific range
+        self.upper_alpha_threshold = upper_alpha_threshold
+        self.upper_alpha_reset = upper_alpha_reset
+        self.lower_alpha_threshold = lower_alpha_threshold
+        self.lower_alpha_reset = lower_alpha_reset
+
+    # Override
+    def process_last_sale(self, obs):
+        super().process_last_sale(obs)
+        if self.round_number > 1:
+            self.last_op_alphas = [self.op_last_prices[i] / max(self.last_cust_values[i], 0.1) for i in self.n_items]
+
+    def bound_alpha(self):
+        for i in range(self.n_items):
+            if self.alphas[i] > self.upper_alpha_threshold:
+                self.alphas[i] = self.upper_alpha_reset
+            elif self.alphas[i] < self.lower_alpha_threshold:
+                self.alphas[i] = self.lower_alpha_reset
+
+    def pre_action(self, obs):
+        self.process_last_sale(obs)
+        self.update_decision()
+        self.bound_alpha()
+        self.update_cust_values()
 
     def action(self, obs):
         # Update params and process last sale
-        self.process_last_sale(obs)
-        self.update_decision()
+        self.pre_action(obs)
 
         # Submit Prices
         if self.project_part == 1:
-            return [self.current_covariates[0] * self.alpha - 0.0001]
+            return [self.current_covariates[0] * self.alphas[0] - 0.0001]
         else:
-            return [self.item0_price * self.alpha - 0.0001, self.item1_price * self.alpha - 0.0001]
+            return [self.item_prices[i] * self.alphas[i] - 0.0001 for i in self.n_items]

@@ -7,6 +7,7 @@ class BaseAgent(object):
         self.project_part = params['project_part'] # useful to be able to use same competition code for each project part
 
         # Last sale information
+        self.round_number = 0
         self.did_customer_but_from_me = True
         self.item_bought = 0
         self.profit = 0
@@ -18,8 +19,10 @@ class BaseAgent(object):
         # Current customer information (used in predictions)
         self.current_covariates = [0.1, 0.1, 0.1]
 
+
     # This is where we take in any information regarding what has happened and store it
     def process_last_sale(self, obs):
+        self.round_number += 1
         new_buyer_covariates, last_sale, state = obs
         self.current_covariates = new_buyer_covariates
         # Current Profits for each Agent
