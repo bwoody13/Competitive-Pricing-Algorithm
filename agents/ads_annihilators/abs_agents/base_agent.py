@@ -19,7 +19,7 @@ class BaseAgent(object):
         self.current_covariates = [0.1, 0.1, 0.1]
 
     # This is where we take in any information regarding what has happened and store it
-    def _process_last_sale(self, obs):
+    def process_last_sale(self, obs):
         new_buyer_covariates, last_sale, state = obs
         self.current_covariates = new_buyer_covariates
         # Current Profits for each Agent
@@ -33,7 +33,7 @@ class BaseAgent(object):
         self.item_bought = last_sale[0]
 
     # This is where we will update alpha and any other attributes which will lead to what our price decision is
-    def _update_decision(self):
+    def update_decision(self):
         pass
 
     # This is what is called by the env and where we must encapsulate logic to call other functions and submit the

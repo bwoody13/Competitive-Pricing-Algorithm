@@ -1,7 +1,5 @@
 import random
-from agents import load
-
-BaseAgent = load('ads-annihilators/abs_agents/base_agent.py').BaseAgent
+from agents.ads_annihilators.abs_agents.base_agent import BaseAgent
 
 
 class Agent(BaseAgent):

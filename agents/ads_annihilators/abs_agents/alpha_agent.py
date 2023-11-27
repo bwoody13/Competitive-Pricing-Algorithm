@@ -1,6 +1,4 @@
-from agents import load
-
-BaseAgent = load('ads-annihilators/abs_agents/base_agent.py').BaseAgent
+from agents.ads_annihilators.abs_agents.base_agent import BaseAgent
 
 
 class AlphaAgent(BaseAgent):
@@ -14,8 +12,8 @@ class AlphaAgent(BaseAgent):
 
     def action(self, obs):
         # Update params and process last sale
-        self._process_last_sale(obs)
-        self._update_decision()
+        self.process_last_sale(obs)
+        self.update_decision()
 
         # Submit Prices
         if self.project_part == 1:
