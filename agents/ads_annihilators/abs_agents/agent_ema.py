@@ -2,13 +2,16 @@ from agents.ads_annihilators.abs_agents.alpha_agent import AlphaAgent
 
 
 class EMAAgent(AlphaAgent):
-    def __init__(self, *args, initial_ema=1.0, ema_weight=0.8, alpha_inc=1.1, alpha_dec=0.9, **kwargs):
+    def __init__(self, *args,
+                 initial_ema=1.0,
+                 ema_weight=0.8,
+                 **kwargs):
         super().__init__(*args, **kwargs)
         self.op_alpha_emas = [initial_ema for _ in range(self.n_items)]
         self.ema_weight = ema_weight
         self.pred_op_alphas = self.last_op_alphas
-        self.alpha_inc = alpha_inc
-        self.alpha_dec = alpha_dec
+        self.alpha_inc = 1.1
+        self.alpha_dec = 0.9
 
     # Predicts the opponent alpha and sets it
     def predict(self):
