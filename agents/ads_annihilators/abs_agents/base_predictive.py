@@ -41,7 +41,7 @@ class BasePredictive(BaseCoopExploit):
                     if action > self.pred_op_alphas[i]:
                         self.pred_op_alphas[i] = min(1.1 * self.pred_op_alphas[i], 1)
                     else:
-                        self.pred_op_alphas[i] *= .9
+                        self.pred_op_alphas[i] *= 0.9
 
         self.op_alpha_emas = [0.8 * self.op_alpha_emas[i] + 0.2 * self.pred_op_alphas[i] for i in range(self.n_items)]
         prediction = self.op_alpha_emas
