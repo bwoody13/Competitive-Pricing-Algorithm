@@ -7,10 +7,16 @@ class EMAAgent(AlphaAgent):
         self.op_alpha_emas = [initial_ema for _ in range(self.n_items)]
         self.ema_weight = ema_weight
         self.pred_op_alphas = self.last_op_alphas
+        self.alpha_inc = 1.1
+        self.alpha_dec = 0.9
 
     # Predicts the opponent alpha and sets it
     def predict(self):
         self.pred_op_alphas = self.last_op_alphas
+        if self.did_customer_buy_from_me:
+            self.pred_op_alphas = [self.alpha_dec * self.pred_op_alphas[i] for i in range(self.n_items)]
+        else:
+            self.pred_op_alphas = [self.alpha_inc * self.pred_op_alphas[i] for i in range(self.n_items)]
 
     def calculate_ema(self):
         self.op_alpha_emas = [self.ema_weight * self.op_alpha_emas[i] +
