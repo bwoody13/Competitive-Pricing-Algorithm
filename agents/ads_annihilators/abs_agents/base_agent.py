@@ -1,6 +1,6 @@
 # This is the base level agent behaviour which every agent is a subclass of.
 class BaseAgent(object):
-    def __init__(self, agent_number, params={}):
+    def __init__(self, agent_number, params={}, **kwargs):
         self.this_agent_number = agent_number  # index for this agent
         self.op_number = 1 - agent_number
         self.n_items = params["n_items"]
@@ -8,16 +8,16 @@ class BaseAgent(object):
 
         # Last sale information
         self.round_number = 0
-        self.did_customer_but_from_me = True
+        self.did_customer_buy_from_me = True
         self.item_bought = 0
         self.profit = 0
         self.op_profit = 0
-        self.last_prices = [0.1, 0.1]
-        self.op_last_prices = [0.1, 0.1]
-        self.last_covariates = [0.1, 0.1, 0.1]
+        self.last_prices = [0.01, 0.01]
+        self.op_last_prices = [0.01, 0.01]
+        self.last_covariates = [0.01, 0.01, 0.01]
 
         # Current customer information (used in predictions)
-        self.current_covariates = [0.1, 0.1, 0.1]
+        self.current_covariates = [0.01, 0.01, 0.01]
 
 
     # This is where we take in any information regarding what has happened and store it

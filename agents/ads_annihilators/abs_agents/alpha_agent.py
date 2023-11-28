@@ -1,8 +1,8 @@
 from agents.ads_annihilators.abs_agents.base_agent import BaseAgent
-from agents.ads_annihilators.abs_agents.base_opt import OptAgent
+from agents.ads_annihilators.abs_agents.base_opt import BaseOpt
 
 
-class AlphaAgent(OptAgent):
+class AlphaAgent(BaseOpt):
     def __init__(self, *args,
                  initial_alpha=1.0,
                  upper_alpha_threshold=1.0,
@@ -11,8 +11,8 @@ class AlphaAgent(OptAgent):
                  lower_alpha_reset=0.1,
                  **kwargs):
         super().__init__(*args, **kwargs)
-        self.alphas = [initial_alpha for _ in self.n_items]
-        self.last_op_alphas = [initial_alpha for _ in self.n_items]
+        self.alphas = [initial_alpha for _ in range(self.n_items)]
+        self.last_op_alphas = [initial_alpha for _ in range(self.n_items)]
 
         # Bounding to keep alpha in a specific range
         self.upper_alpha_threshold = upper_alpha_threshold
@@ -24,7 +24,8 @@ class AlphaAgent(OptAgent):
     def process_last_sale(self, obs):
         super().process_last_sale(obs)
         if self.round_number > 1:
-            self.last_op_alphas = [self.op_last_prices[i] / max(self.last_cust_values[i], 0.1) for i in self.n_items]
+            self.last_op_alphas = [min(self.op_last_prices[i] / max(self.last_cust_values[i], 0.01), 1)
+                                   for i in range(self.n_items)]
 
     def bound_alpha(self):
         for i in range(self.n_items):
@@ -47,4 +48,4 @@ class AlphaAgent(OptAgent):
         if self.project_part == 1:
             return [self.current_covariates[0] * self.alphas[0] - 0.0001]
         else:
-            return [self.item_prices[i] * self.alphas[i] - 0.0001 for i in self.n_items]
+            return [self.item_prices[i] * self.alphas[i] - 0.0001 for i in range(self.n_items)]

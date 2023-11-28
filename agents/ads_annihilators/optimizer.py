@@ -3,7 +3,7 @@ import pickle
 
 
 class Optimizer:
-    def __init__(self, model_file="xgbclassifier_v1.pkl"):
+    def __init__(self, model_file="agents/ads_annihilators/xgbclassifier_v1.pkl"):
         self.model = pickle.load(open(model_file, 'rb'))
 
         # The following mins and maxes are from analysis of training data
