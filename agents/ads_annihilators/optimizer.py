@@ -5,12 +5,12 @@ import pickle
 class Optimizer:
     def __init__(self,
                  model_file="agents/ads_annihilators/xgbclassifier_v1.pkl",
-                 bought_range_p0=18,
-                 over_range1_p0=4,
-                 over_range2_p0=3,
-                 bought_range_p1=20,
-                 over_range1_p1=4,
-                 over_range2_p1=3,
+                 bought_range_p0=30,
+                 # over_range1_p0=4,
+                 # over_range2_p0=3,
+                 bought_range_p1=40,
+                 # over_range1_p1=4,
+                 # over_range2_p1=3,
                  ):
         self.model = pickle.load(open(model_file, 'rb'))
 
@@ -25,11 +25,11 @@ class Optimizer:
 
         # The ranges to use within the linspace for p0 and p1 prices to offer
         self.bought_range_p0 = bought_range_p0
-        self.over_range1_p0 = over_range1_p0
-        self.over_range2_p0 = over_range2_p0
+        # self.over_range1_p0 = over_range1_p0
+        # self.over_range2_p0 = over_range2_p0
         self.bought_range_p1 = bought_range_p1
-        self.over_range1_p1 = over_range1_p1
-        self.over_range2_p1 = over_range2_p1
+        # self.over_range1_p1 = over_range1_p1
+        # self.over_range2_p1 = over_range2_p1
 
         # Make price combinations based on range of prices
         self.price_combinations = self._make_prices_to_predict()
@@ -41,16 +41,19 @@ class Optimizer:
         was no purchase for that item.
         :return: combination of all price pairs for item0 and item1
         '''
-        p0_to_predict_comb = np.concatenate([
-            np.linspace(self.min_p0, self.max_p0_b, self.bought_range_p0),
-            np.linspace(self.max_p0_b + 0.1, self.max_p0 / 3, self.over_range1_p0),
-            np.linspace(self.max_p0 / 3 + 0.1, self.max_p0, self.over_range2_p0)
-        ])
-        p1_to_predict_comb = np.concatenate([
-            np.linspace(self.min_p1, self.max_p1_b, self.bought_range_p1),
-            np.linspace(self.max_p1_b + 0.1, self.max_p1 / 3, self.over_range1_p1),
-            np.linspace(self.max_p0 / 3 + 0.1, self.max_p1, self.over_range2_p1)
-        ])
+        # p0_to_predict_comb = np.concatenate([
+        #     np.linspace(self.min_p0, self.max_p0_b, self.bought_range_p0),
+        #     np.linspace(self.max_p0_b + 0.1, self.max_p0 / 3, self.over_range1_p0),
+        #     np.linspace(self.max_p0 / 3 + 0.1, self.max_p0, self.over_range2_p0)
+        # ])
+        # p1_to_predict_comb = np.concatenate([
+        #     np.linspace(self.min_p1, self.max_p1_b, self.bought_range_p1),
+        #     np.linspace(self.max_p1_b + 0.1, self.max_p1 / 3, self.over_range1_p1),
+        #     np.linspace(self.max_p0 / 3 + 0.1, self.max_p1, self.over_range2_p1)
+        # ])
+        p0_to_predict_comb = np.linspace(self.min_p0, self.max_p0_b, self.bought_range_p0)
+        p1_to_predict_comb = np.linspace(self.min_p1, self.max_p1_b, self.bought_range_p1)
+
         p0_grid, p1_grid = np.meshgrid(p0_to_predict_comb, p1_to_predict_comb)
         return np.column_stack([p0_grid.ravel(), p1_grid.ravel()])
 
