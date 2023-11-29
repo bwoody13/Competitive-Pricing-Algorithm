@@ -9,4 +9,4 @@ class Agent(AlphaAgent):
         if self.did_customer_buy_from_me:  # can increase prices
             self.alphas = [self.alphas[i] * 1.1 for i in range(self.n_items)]
         else:  # should decrease prices
-            self.alphas = [self.alphas[i] * 0.9it  for i in range(self.n_items)]
+            self.alphas = [self.alphas[i] * 0.9  for i in range(self.n_items)]
