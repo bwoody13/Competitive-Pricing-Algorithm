@@ -23,9 +23,9 @@ class AlphaAgent(BaseOpt):
     # Override
     def process_last_sale(self, obs):
         super().process_last_sale(obs)
-        alpha = 1
         if self.round_number > 1:
-            self.last_op_alphas = [min(self.op_last_prices[i] / max(self.last_cust_values[i], 0.01), 1) for i in range(self.n_items)]
+            self.last_op_alphas = [min(self.op_last_prices[i] / max(self.last_cust_values[i], 0.01), 1)
+                                   for i in range(self.n_items)]
 
     def bound_alpha(self):
         for i in range(self.n_items):
