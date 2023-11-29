@@ -1,3 +1,4 @@
+from agents.ads_annihilators.optimizer import Optimizer
 class Agent(object):
     def __init__(self, agent_number, params={}):
         self.this_agent_number = agent_number  # index for this agent
@@ -6,7 +7,7 @@ class Agent(object):
         self.cust_value_0 = 1.0
         self.cust_value_1 = 1.0
         self.project_part = params['project_part'] #useful to be able to use same competition code for each project part
-    
+        self.optimizer = Optimizer()
     def _process_last_sale(self, new_buyer_covariates, last_sale):
         did_customer_buy_from_me = last_sale[1] == self.this_agent_number
         covs = new_buyer_covariates
@@ -14,7 +15,7 @@ class Agent(object):
             self.alpha *= 1.1
         else:  # should decrease prices
             self.alpha *= 0.9
-        (self.cust_value_0, self.cust_value_1), revenue = optimizer.get_revenue_maximizing_prices_and_revenue_from_cov(covs)
+        (self.cust_value_0, self.cust_value_1), revenue = self.optimizer.get_revenue_maximizing_prices_and_revenue_from_cov(covs)
     
     # Given an observation which is #info for new buyer, information for last iteration, and current profit from each time
     # Covariates of the current buyer

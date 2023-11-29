@@ -5,10 +5,10 @@ import pickle
 class Optimizer:
     def __init__(self,
                  model_file="agents/ads_annihilators/xgbclassifier_v1.pkl",
-                 bought_range_p0=30,
+                 bought_range_p0=15,
                  # over_range1_p0=4,
                  # over_range2_p0=3,
-                 bought_range_p1=40,
+                 bought_range_p1=20,
                  # over_range1_p1=4,
                  # over_range2_p1=3,
                  ):

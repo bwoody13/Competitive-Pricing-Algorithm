@@ -2,7 +2,7 @@ from agents.ads_annihilators.abs_agents.base_agent import BaseAgent
 from agents.ads_annihilators.abs_agents.base_opt import BaseOpt
 
 
-class AlphaAgent(BaseOpt):
+class SingleAlphaAgent(BaseOpt):
     def __init__(self, *args,
                  initial_alpha=1.0,
                  upper_alpha_threshold=1.0,
@@ -25,7 +25,12 @@ class AlphaAgent(BaseOpt):
         super().process_last_sale(obs)
         alpha = 1
         if self.round_number > 1:
-            self.last_op_alphas = [min(self.op_last_prices[i] / max(self.last_cust_values[i], 0.01), 1) for i in range(self.n_items)]
+            max_discount = 0
+            for i in range(self.n_items):
+                discount = self.last_cust_values[i] - self.op_last_prices[i]
+                if discount > max_discount:
+                    alpha = min(self.op_last_prices[i] / max(self.last_cust_values[i], 0.01), 1)
+            self.last_op_alphas = [alpha for i in range(self.n_items)]
 
     def bound_alpha(self):
         for i in range(self.n_items):
