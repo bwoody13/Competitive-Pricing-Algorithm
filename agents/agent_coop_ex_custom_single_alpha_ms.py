@@ -1,8 +1,10 @@
-from agents.ads_annihilators.abs_agents.single_alpha_base_coop_exploit_ms import SingleAlphaCoopExploitMS
+from agents.ads_annihilators.abs_agents.base_coop_exploit import BaseCoopExploit
 
 
-class Agent(SingleAlphaCoopExploitMS):
+class Agent(BaseCoopExploit):
     def __init__(self, *args, **kwargs):
         super().__init__(*args,
+                         moonshot=True,
+                         single_alpha=True,
                          exploit_threshold=75,
                          **kwargs)

@@ -4,5 +4,6 @@ from agents.ads_annihilators.abs_agents.base_coop_exploit_ms import BaseCoopExpl
 class Agent(BaseCoopExploitMS):
     def __init__(self, *args, **kwargs):
         super().__init__(*args,
+                         moonshot=True,
                          exploit_threshold=30,
                          **kwargs)
