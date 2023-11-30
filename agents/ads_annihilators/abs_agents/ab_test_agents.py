@@ -1,10 +1,10 @@
-from agents.ads_annihilators.abs_agents.base_opt import BaseOpt
+from agents.ads_annihilators.abs_agents.base_agent import BaseAgent
 
 
 class ABTestAgents:
     def __init__(self,
-                 agent1: BaseOpt,
-                 agent2: BaseOpt,
+                 agent1: BaseAgent,
+                 agent2: BaseAgent,
                  ab_length=1000,
                  switch_times=1):
         self.agent1 = agent1
