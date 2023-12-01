@@ -1,7 +1,6 @@
 from statsmodels.stats.proportion import proportions_ztest, proportion_confint
 
 from agents.ads_annihilators.abs_agents.base_agent import BaseAgent
-from agents.ads_annihilators.abs_agents.moonshot import Moonshot
 
 
 class ABTestVariantAttrs:
@@ -20,8 +19,6 @@ class ABTestVariantAttrs:
 
         # AB Test attribute
         self.test_attributes = attributes
-        if isinstance(agent, Moonshot):
-            agent = agent.true_agent
         for attribute_name in attributes.keys():
             attributes[attribute_name] = getattr(agent, attribute_name)
         self.og_attributes = attributes
@@ -30,10 +27,7 @@ class ABTestVariantAttrs:
 
     def set_attributes(self, attributes):
         for attribute_name, attribute_val in attributes.items():
-            if isinstance(self.agent, Moonshot):
-                setattr(self.agent.true_agent, attribute_name, attribute_val)
-            else:
-                setattr(self.agent, attribute_name, attribute_val)
+            setattr(self.agent, attribute_name, attribute_val)
 
     def check_significance(self):
         num_each = self.ab_length // 2
