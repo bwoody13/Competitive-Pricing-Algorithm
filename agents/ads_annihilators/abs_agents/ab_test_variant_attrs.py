@@ -1,6 +1,25 @@
-from statsmodels.stats.proportion import proportions_ztest, proportion_confint
-
+# from statsmodels.stats.proportion import proportions_ztest, proportion_confint
+import numpy as np
+from scipy.stats import norm
 from agents.ads_annihilators.abs_agents.base_agent import BaseAgent
+
+
+def proportions_ztest(successes, nobs):
+    proportions = successes / nobs
+    pooled_prop = np.sum(successes) / np.sum(nobs)
+    pooled_se = np.sqrt(pooled_prop * (1 - pooled_prop) * np.sum(1 / nobs))
+    z_stat = (proportions[1] - proportions[0]) / pooled_se
+    pval = 1 - norm.cdf(z_stat)
+    return z_stat, pval
+
+
+def proportion_confint(successes, nobs, alpha=0.05):
+    proportions = successes / nobs
+    z_score = norm.ppf(1 - alpha / 2)
+    se = np.sqrt(proportions * (1 - proportions) / nobs)
+    confint_lower = proportions - z_score * se
+    confint_upper = proportions + z_score * se
+    return (confint_lower[0], confint_lower[1]), (confint_upper[0], confint_upper[1])
 
 
 class ABTestVariantAttrs:
@@ -31,9 +50,9 @@ class ABTestVariantAttrs:
 
     def check_significance(self):
         num_each = self.ab_length // 2
-        nobs = [num_each, num_each]
-        success = [self.og_profit, self.test_profit]
-        z_stat, pval = proportions_ztest(success, nobs=nobs, alternative='larger')
+        nobs = np.array([num_each, num_each])
+        success = np.array([self.og_profit, self.test_profit])
+        z_stat, pval = proportions_ztest(success, nobs=nobs)
         (lower_con, lower_treat), (upper_con, upper_treat) = proportion_confint(success, nobs=nobs, alpha=0.05)
         if pval < self.ab_alpha and lower_treat > lower_con and upper_con > upper_treat:
             # Test group is not same and has higher interval for profits
@@ -55,16 +74,3 @@ class ABTestVariantAttrs:
         # Run agent based on stage
         self.round_number += 1
         return self.agent.action(obs)
-
-    # def action(self, obs):
-    #     # Get profit
-    #     if self.round_number == self.ab_length // 2:
-    #         self.og_profit = self.agent.profit
-    #         self.set_attributes(self.test_attributes)
-    #     elif self.round_number == self.ab_length:
-    #         self.test_profit = self.agent.profit - self.og_profit
-    #         self.check_significance()
-    #
-    #     # Run agent based on stage
-    #     self.round_number += 1
-    #     return self.agent.action(obs)
