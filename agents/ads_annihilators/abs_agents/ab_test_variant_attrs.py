@@ -24,6 +24,7 @@ class ABTestVariantAttrs:
         self.og_attributes = attributes
         self.og_profit = 0
         self.test_profit = 0
+        self.profit = 0
 
     def set_attributes(self, attributes):
         for attribute_name, attribute_val in attributes.items():
@@ -54,6 +55,7 @@ class ABTestVariantAttrs:
 
         # Run agent based on stage
         self.round_number += 1
+        self.profit = self.agent.profit
         return self.agent.action(obs)
 
     # def action(self, obs):
