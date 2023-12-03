@@ -13,6 +13,7 @@ class Agent(ABTestAgents):
                                  moonshot=True,
                                  lower_alpha_threshold=0.2,
                                  lower_alpha_reset=0.4,
+                                 exploit_threshold=40,
                                  **kwargs)
         ab1 = ABTestVariantAttrs(agent1, attributes, ab_length=250)
 
