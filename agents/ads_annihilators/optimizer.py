@@ -5,10 +5,10 @@ import pickle
 class Optimizer:
     def __init__(self,
                  model_file="agents/ads_annihilators/gradboost_v1.pkl",
-                 bought_range_p0=30,
+                 bought_range_p0=45,
                  # over_range1_p0=4,
                  # over_range2_p0=3,
-                 bought_range_p1=40,
+                 bought_range_p1=60,
                  # over_range1_p1=4,
                  # over_range2_p1=3,
                  ):
